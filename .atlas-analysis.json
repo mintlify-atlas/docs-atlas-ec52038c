@@ -1,0 +1,94 @@
+{
+  "projectType": "saas",
+  "projectName": "CoreDump",
+  "projectDescription": "A comprehensive coding tracking platform that helps developers monitor progress, maintain streaks, compete on leaderboards, and enhance skills through gamification.",
+  "theme": "aspen",
+  "primaryColor": "#7c3aed",
+  "lightColor": "#a78bfa",
+  "darkColor": "#5b21b6",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "installation"
+            ]
+          },
+          {
+            "group": "Core Features",
+            "pages": [
+              "features/dashboard",
+              "features/leaderboards",
+              "features/profiles",
+              "features/streaks",
+              "features/achievements"
+            ]
+          },
+          {
+            "group": "VS Code Extension",
+            "pages": [
+              "extension/overview",
+              "extension/installation",
+              "extension/configuration"
+            ]
+          },
+          {
+            "group": "Embedding Stats",
+            "pages": [
+              "embedding/readme-badges",
+              "embedding/public-api"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "api/overview",
+              "api/authentication"
+            ]
+          },
+          {
+            "group": "Endpoints",
+            "pages": [
+              "api/activity",
+              "api/dashboard",
+              "api/leaderboard",
+              "api/profile",
+              "api/stats",
+              "api/public-stats"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Daily streak tracking with automatic monitoring",
+    "Global leaderboards with 24h and 7-day rankings",
+    "Multi-language tracking with detailed analytics",
+    "Real-time coding activity tracking via VS Code extension",
+    "Developer profiles with comprehensive statistics",
+    "README badges and embeddable stats cards",
+    "Achievement system with gamification",
+    "Public API for programmatic access to stats"
+  ],
+  "publicApiSurface": [
+    "POST /api/activity - Track coding activity",
+    "GET /api/dashboard - Get dashboard data",
+    "GET /api/leaderboard - Get leaderboard rankings",
+    "GET /api/profile - Get user profile data",
+    "GET /api/stats?username={username}&type={type} - Generate SVG badges",
+    "GET /api/public-stats?username={username} - Get public stats in JSON",
+    "POST /api/auth/register - Register new user",
+    "GET /api/reset-duration - Reset duration tracking"
+  ]
+}
