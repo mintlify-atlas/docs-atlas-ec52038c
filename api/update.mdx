@@ -1,0 +1,165 @@
+---
+title: 'PUT /api/update'
+description: 'Update user profile information'
+---
+
+## Endpoint
+
+```http
+PUT /api/update
+```
+
+## Description
+
+Update your CoreDump user profile information including name, GitHub username, Twitter username, website, and password. This endpoint requires session authentication.
+
+## Authentication
+
+Requires active user session (authenticated via NextAuth). You must be logged in to update your profile.
+
+## Request Body
+
+<ParamField body="name" type="string">
+  Your display name
+</ParamField>
+
+<ParamField body="gitUsername" type="string">
+  Your GitHub username. The API will verify this username exists on GitHub and update your profile image accordingly.
+</ParamField>
+
+<ParamField body="twitterUsername" type="string">
+  Your Twitter/X username (without the @ symbol)
+</ParamField>
+
+<ParamField body="website" type="string">
+  Your personal website URL
+</ParamField>
+
+<ParamField body="password" type="string">
+  New password for your account. Will be securely hashed before storage.
+</ParamField>
+
+<Note>
+  All fields are optional. Only include the fields you want to update.
+</Note>
+
+## Response
+
+### Success (200)
+
+```json
+{
+  "message": "User updated successfully"
+}
+```
+
+### Error Responses
+
+#### Unauthorized (401)
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+Returned when no valid session is found.
+
+#### GitHub User Not Found (404)
+
+```json
+{
+  "message": "GitHub user not found"
+}
+```
+
+Returned when the provided GitHub username doesn't exist on GitHub.
+
+#### Username Already Exists (409)
+
+```json
+{
+  "message": "Username or email already exists"
+}
+```
+
+Returned when the GitHub username or Twitter username is already taken by another CoreDump user.
+
+#### Server Error (500)
+
+```json
+{
+  "message": "Internal server error"
+}
+```
+
+## Example
+
+### Update GitHub Username
+
+```bash
+curl -X PUT https://coredump.vercel.app/api/update \
+  -H "Content-Type: application/json" \
+  -H "Cookie: your-session-cookie" \
+  -d '{
+    "gitUsername": "johndoe"
+  }'
+```
+
+### Update Multiple Fields
+
+```bash
+curl -X PUT https://coredump.vercel.app/api/update \
+  -H "Content-Type: application/json" \
+  -H "Cookie: your-session-cookie" \
+  -d '{
+    "name": "John Doe",
+    "gitUsername": "johndoe",
+    "twitterUsername": "johndoe",
+    "website": "https://johndoe.dev"
+  }'
+```
+
+## Behavior Notes
+
+### GitHub Username Verification
+
+When updating your GitHub username:
+1. The API converts it to lowercase
+2. Verifies the username exists on GitHub via the GitHub API
+3. Automatically fetches and updates your profile image from GitHub
+4. Returns an error if the username doesn't exist
+
+### Password Security
+
+When updating your password:
+- The password is hashed using bcrypt with a salt rounds of 10
+- The plain text password is never stored
+- Use a strong password for better security
+
+### Uniqueness Constraints
+
+The following fields must be unique across all CoreDump users:
+- GitHub username (gitUsername)
+- Twitter username (twitterUsername)
+- Email address (cannot be changed via this endpoint)
+
+## Usage in Application
+
+This endpoint is typically called from the user settings/profile page when a user wants to update their information. The frontend should:
+
+1. Provide a form with the user's current information
+2. Send only the fields that were changed
+3. Handle the response appropriately (success message or error)
+4. Refresh the user's session or profile data after successful update
+
+## Related Endpoints
+
+<CardGroup cols={2}>
+  <Card title="GET /api/dashboard" icon="chart-line" href="/api/dashboard">
+    Get your current profile data
+  </Card>
+  <Card title="POST /api/auth/register" icon="user-plus" href="/api/authentication">
+    Create a new account
+  </Card>
+</CardGroup>

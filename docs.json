@@ -76,6 +76,7 @@
               "api/leaderboard",
               "api/profile",
               "api/stats",
+              "api/update",
               "api/public-stats"
             ]
           }
