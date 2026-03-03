@@ -1,0 +1,202 @@
+---
+title: Configuration
+description: Configure the CoreDump VS Code extension with your private API key and start tracking
+---
+
+After installing the CoreDump extension, you need to configure it with your private API key to start tracking your coding activity.
+
+## Finding Your Private API Key
+
+Your private API key authenticates the extension with your CoreDump account.
+
+<Steps>
+  <Step title="Log in to CoreDump">
+    Visit [CoreDump](https://coredump.vercel.app) and sign in with your Google account
+  </Step>
+  
+  <Step title="Navigate to your dashboard">
+    Click on **Dashboard** in the navigation menu to access your personal dashboard
+  </Step>
+  
+  <Step title="Locate the Private Key section">
+    Scroll down to find the "Private Key" section on your dashboard - it displays your unique API key
+  </Step>
+  
+  <Step title="Copy your key">
+    Click the copy icon next to your private key to copy it to your clipboard. You can also click the eye icon to toggle visibility
+  </Step>
+</Steps>
+
+<Warning>
+  Your private key is sensitive. Keep it secure and never share it publicly or commit it to version control. Anyone with your key can send activity data to your account.
+</Warning>
+
+## Configuring the Extension
+
+Once you have your private API key, configure the extension:
+
+<Steps>
+  <Step title="Open Command Palette">
+    In VS Code, press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (Mac) to open the Command Palette
+  </Step>
+  
+  <Step title="Search for CoreDump command">
+    Type "CoreDump: Enter Private Key" and select it from the list
+  </Step>
+  
+  <Step title="Enter your private key">
+    Paste your private key into the input field that appears and press Enter
+  </Step>
+  
+  <Step title="Restart VS Code">
+    Close and reopen VS Code to apply the configuration. You can also reload the window by opening Command Palette and running "Developer: Reload Window"
+  </Step>
+</Steps>
+
+<Tip>
+  After restarting, the extension will automatically start tracking your coding activity. You don't need to do anything else!
+</Tip>
+
+## Verifying the Connection
+
+Confirm that the extension is properly configured and tracking:
+
+<Steps>
+  <Step title="Start coding">
+    Open any file in VS Code and start writing code. Work for at least a few minutes to generate trackable activity
+  </Step>
+  
+  <Step title="Check your dashboard">
+    Return to your CoreDump dashboard and refresh the page. You should see your coding time and language statistics updating
+  </Step>
+  
+  <Step title="Verify language tracking">
+    Check that the programming language of the file you're working on appears in your dashboard's language breakdown
+  </Step>
+</Steps>
+
+<Note>
+  Activity data may take a minute or two to appear on your dashboard. The extension sends updates periodically rather than continuously.
+</Note>
+
+## Extension Settings
+
+Currently, the CoreDump extension works automatically after you've set your private key. There are no additional settings to configure.
+
+The extension:
+
+- Tracks time automatically when you're actively coding
+- Detects programming languages based on file extensions
+- Sends data securely to the CoreDump API
+- Runs silently in the background without interrupting your workflow
+
+## Updating Your Private Key
+
+If you need to change your private API key:
+
+<Steps>
+  <Step title="Get your new key">
+    If your key was compromised or reset, obtain the new key from your CoreDump dashboard
+  </Step>
+  
+  <Step title="Open Command Palette">
+    Press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (Mac)
+  </Step>
+  
+  <Step title="Re-enter your key">
+    Run "CoreDump: Enter Private Key" again and paste your new key
+  </Step>
+  
+  <Step title="Restart VS Code">
+    Reload the VS Code window to apply the new configuration
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+### Activity not tracking
+
+If your coding time isn't appearing on your dashboard:
+
+**Check your private key**
+- Verify you copied the complete key without extra spaces
+- Ensure you entered it correctly in the extension
+- Try copying and re-entering your key from the dashboard
+
+**Verify your internet connection**
+- The extension needs internet access to send data to CoreDump
+- Check if you're behind a firewall or proxy that might block requests
+
+**Confirm you're coding in supported languages**
+- Check the [supported languages list](/extension/overview#supported-languages)
+- Some file types may not be recognized as programming languages
+
+**Check extension status**
+- Open the Output panel (`View > Output`)
+- Select "Extension Host" from the dropdown
+- Look for any CoreDump-related error messages
+
+### Invalid API key error
+
+If you see an "Invalid API key" or "User not found" error:
+
+- Double-check that you copied your private key correctly
+- Ensure you're logged into the same CoreDump account where you got the key
+- Try regenerating your key from the dashboard if the problem persists
+
+### Connection timeout
+
+If the extension can't connect to CoreDump:
+
+- Verify your internet connection is stable
+- Check if your network blocks outbound API requests
+- Try temporarily disabling any VPN or proxy to isolate the issue
+
+### Extension not running
+
+If the extension doesn't seem to be active:
+
+- Ensure it's enabled in the Extensions view
+- Check that you restarted VS Code after configuration
+- Try uninstalling and reinstalling the extension
+- Look for conflicts with other time-tracking extensions
+
+<Tip>
+  If you continue experiencing issues, check the [GitHub repository](https://github.com/unsafe0x0/CoreDump-Extension) for known issues or to report a bug.
+</Tip>
+
+## Security Best Practices
+
+Protect your CoreDump account and data:
+
+<CardGroup cols={2}>
+  <Card title="Keep keys private" icon="lock">
+    Never share your private API key or commit it to public repositories
+  </Card>
+  
+  <Card title="Use workspace settings carefully" icon="folder">
+    Avoid storing your key in workspace or project settings that might be shared
+  </Card>
+  
+  <Card title="Monitor your dashboard" icon="chart-line">
+    Regularly check your dashboard for unexpected activity that might indicate key compromise
+  </Card>
+  
+  <Card title="Reset if compromised" icon="key">
+    If your key is exposed, contact CoreDump support to reset it immediately
+  </Card>
+</CardGroup>
+
+## Next Steps
+
+Now that your extension is configured, explore what you can do with your coding data:
+
+<CardGroup cols={2}>
+  <Card title="View Your Dashboard" icon="chart-mixed" href="https://coredump.vercel.app/dashboard">
+    Check your coding stats, streaks, and achievements
+  </Card>
+  
+  <Card title="Join Leaderboards" icon="trophy" href="https://coredump.vercel.app/leaderboard">
+    Compete with other developers on 24-hour and 7-day rankings
+  </Card>
+</CardGroup>

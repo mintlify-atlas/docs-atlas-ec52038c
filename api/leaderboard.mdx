@@ -1,0 +1,199 @@
+---
+title: 'GET /api/leaderboard'
+description: 'Get global leaderboard data'
+---
+
+## Endpoint
+
+```
+GET /api/leaderboard
+```
+
+## Description
+
+Retrieve leaderboard data for all users, including their coding statistics and activity breakdown by programming language. This endpoint is public and does not require authentication.
+
+## Authentication
+
+No authentication required. This is a public endpoint.
+
+## Request Parameters
+
+No parameters required.
+
+## Caching
+
+This endpoint uses LRU caching:
+- **Cache size**: 100 entries
+- **TTL**: 10 minutes (600,000ms)
+
+If cached data exists, it will be returned immediately without querying the database.
+
+## Response
+
+### Success (200)
+
+```json
+{
+  "message": "Data fetched successfully",
+  "status": 200,
+  "data": [
+    {
+      "name": "John Doe",
+      "gitUsername": "johndoe",
+      "twitterUsername": "johndoe",
+      "profileImage": "https://avatars.githubusercontent.com/u/123456",
+      "streak": 15,
+      "activities": [
+        {
+          "languageName": "typescript",
+          "shortLanguageName": "TS",
+          "totalDuration": 4560.5,
+          "last24HoursDuration": 45.0,
+          "last7DaysDuration": 320.5
+        },
+        {
+          "languageName": "python",
+          "shortLanguageName": "PY",
+          "totalDuration": 2340.0,
+          "last24HoursDuration": 0,
+          "last7DaysDuration": 180.0
+        }
+      ]
+    },
+    {
+      "name": "Jane Smith",
+      "gitUsername": "janesmith",
+      "twitterUsername": "janesmith",
+      "profileImage": "https://avatars.githubusercontent.com/u/789012",
+      "streak": 42,
+      "activities": [
+        {
+          "languageName": "rust",
+          "shortLanguageName": "RS",
+          "totalDuration": 8920.0,
+          "last24HoursDuration": 120.0,
+          "last7DaysDuration": 560.0
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Response Fields
+
+<ResponseField name="message" type="string">
+  Success message
+</ResponseField>
+
+<ResponseField name="status" type="number">
+  HTTP status code (200)
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  Array of user objects with their activity data
+  
+  <Expandable title="User Object">
+    <ResponseField name="name" type="string">
+      User's full name
+    </ResponseField>
+    
+    <ResponseField name="gitUsername" type="string">
+      GitHub username
+    </ResponseField>
+    
+    <ResponseField name="twitterUsername" type="string">
+      Twitter/X username
+    </ResponseField>
+    
+    <ResponseField name="profileImage" type="string">
+      Profile image URL from GitHub
+    </ResponseField>
+    
+    <ResponseField name="streak" type="number">
+      Current consecutive days coding streak
+    </ResponseField>
+    
+    <ResponseField name="activities" type="array">
+      Array of activity objects per programming language
+      
+      <Expandable title="Activity Object">
+        <ResponseField name="languageName" type="string">
+          Programming language name (lowercase)
+        </ResponseField>
+        
+        <ResponseField name="shortLanguageName" type="string">
+          Abbreviated language name (e.g., "TS", "PY", "RS")
+        </ResponseField>
+        
+        <ResponseField name="totalDuration" type="number">
+          Total time spent in this language (minutes, all-time)
+        </ResponseField>
+        
+        <ResponseField name="last24HoursDuration" type="number">
+          Time spent in last 24 hours (minutes)
+        </ResponseField>
+        
+        <ResponseField name="last7DaysDuration" type="number">
+          Time spent in last 7 days (minutes)
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Error Responses
+
+### Internal Server Error (500)
+
+```json
+{
+  "message": "Something went wrong",
+  "status": 500
+}
+```
+
+Returned when an unexpected error occurs while fetching data.
+
+## Example Request
+
+```bash
+curl -X GET https://your-domain.com/api/leaderboard
+```
+
+## Use Cases
+
+This endpoint is ideal for:
+
+- Displaying a global leaderboard sorted by total time, streak, or other metrics
+- Comparing coding activity across different users
+- Building competitive features and rankings
+- Analyzing language popularity across all users
+
+## Client-Side Sorting
+
+The data is not pre-sorted. You can sort by various metrics on the client side:
+
+```javascript
+// Sort by total coding time
+const byTotalTime = data.sort((a, b) => {
+  const aTotal = a.activities.reduce((sum, act) => sum + act.totalDuration, 0);
+  const bTotal = b.activities.reduce((sum, act) => sum + act.totalDuration, 0);
+  return bTotal - aTotal;
+});
+
+// Sort by current streak
+const byStreak = data.sort((a, b) => b.streak - a.streak);
+
+// Sort by last 7 days activity
+const byWeeklyActivity = data.sort((a, b) => {
+  const aWeekly = a.activities.reduce((sum, act) => sum + act.last7DaysDuration, 0);
+  const bWeekly = b.activities.reduce((sum, act) => sum + act.last7DaysDuration, 0);
+  return bWeekly - aWeekly;
+});
+```
+
+<Note>
+  This endpoint returns all users in the database. For large user bases, consider implementing pagination or filtering on the server side.
+</Note>

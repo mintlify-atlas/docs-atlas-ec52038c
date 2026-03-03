@@ -1,0 +1,199 @@
+---
+title: 'README Badges'
+description: 'Embed dynamic SVG badges in your GitHub README to showcase your coding stats'
+---
+
+## Overview
+
+CoreDump provides dynamic SVG badges that you can embed in your GitHub README, portfolio, or any markdown file. These badges automatically update to reflect your latest coding statistics, creating a visual showcase of your development activity.
+
+## Available Badge Types
+
+CoreDump offers two types of badges to display your coding stats:
+
+### Stats Card
+
+A comprehensive card showing both your weekly and daily coding time:
+
+```markdown
+![CoreDump Stats](https://coredump.vercel.app/api/stats?username=yourusername&type=stats-card)
+```
+
+### Total Time Badge
+
+A compact badge displaying your total coding time:
+
+```markdown
+![CoreDump Time](https://coredump.vercel.app/api/stats?username=yourusername&type=total-time)
+```
+
+## Quick Start
+
+To add a badge to your GitHub README:
+
+1. Replace `yourusername` with your GitHub username
+2. Choose your preferred badge type
+3. Add the markdown code to your README.md
+4. Commit and push - your badge will appear automatically
+
+<CodeGroup>
+
+```markdown Stats Card
+![CoreDump Stats](https://coredump.vercel.app/api/stats?username=yourusername&type=stats-card)
+```
+
+```markdown Total Time
+![CoreDump Time](https://coredump.vercel.app/api/stats?username=yourusername&type=total-time)
+```
+
+```html HTML Format
+<img src="https://coredump.vercel.app/api/stats?username=yourusername&type=stats-card" alt="CoreDump Stats" />
+```
+
+</CodeGroup>
+
+## Parameters
+
+Customize your badge using URL parameters:
+
+<ParamField query="username" type="string" required>
+  Your GitHub username. This must match the username you used when signing up for CoreDump.
+</ParamField>
+
+<ParamField query="type" type="string" default="stats-card">
+  The badge type to display. Available options:
+  - `stats-card` - Full stats card with weekly and daily time
+  - `total-time` - Compact badge with total time only
+</ParamField>
+
+## Examples
+
+### Basic Stats Card
+
+Display your complete coding statistics:
+
+```markdown
+![CoreDump Stats](https://coredump.vercel.app/api/stats?username=johndoe&type=stats-card)
+```
+
+This shows:
+- Total coding time for the past 7 days
+- Total coding time for the past 24 hours
+
+### Compact Time Badge
+
+For a more minimal look:
+
+```markdown
+![Coding Time](https://coredump.vercel.app/api/stats?username=johndoe&type=total-time)
+```
+
+### Multiple Badges
+
+You can combine multiple badges in your README:
+
+```markdown
+## My Coding Stats
+
+![Weekly Stats](https://coredump.vercel.app/api/stats?username=johndoe&type=stats-card)
+
+![Total Time](https://coredump.vercel.app/api/stats?username=johndoe&type=total-time)
+```
+
+## Best Practices
+
+### Placement
+
+Place your CoreDump badge where it's easily visible:
+
+- **Top of README** - Next to other badges for maximum visibility
+- **Stats Section** - In a dedicated statistics or achievements section
+- **Footer** - As part of your README footer with other links
+
+### Example Layout
+
+```markdown
+# Your Project Name
+
+[![CoreDump](https://coredump.vercel.app/api/stats?username=yourusername&type=stats-card)](https://coredump.vercel.app)
+[![GitHub Stars](https://img.shields.io/github/stars/yourusername/repo)](https://github.com/yourusername/repo)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+Your project description here...
+```
+
+### Making It Clickable
+
+Wrap your badge in a link to your CoreDump profile:
+
+```markdown
+[![CoreDump Stats](https://coredump.vercel.app/api/stats?username=yourusername&type=stats-card)](https://coredump.vercel.app/developer/yourusername)
+```
+
+## Caching & Updates
+
+Badges are generated in real-time based on your latest coding activity:
+
+- Stats update automatically as you code
+- GitHub may cache images for a few minutes
+- Force refresh by appending a cache-busting parameter: `?username=you&type=stats-card&cache=bust`
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Badge not displaying">
+    Check that:
+    - Your GitHub username is correct
+    - You have an active CoreDump account
+    - You've logged coding time with the VS Code extension
+    - The image URL is properly formatted
+  </Accordion>
+
+  <Accordion title="Stats showing zero">
+    Ensure you:
+    - Have installed the CoreDump VS Code extension
+    - Are logged in to the extension
+    - Have coded recently (stats reflect last 7 days and 24 hours)
+  </Accordion>
+
+  <Accordion title="Username not found error">
+    The username parameter must match:
+    - Your GitHub username (not your email)
+    - The exact username used in your CoreDump account
+    - Case-sensitive format
+  </Accordion>
+</AccordionGroup>
+
+## Advanced Usage
+
+### Profile README
+
+Create a special repository named after your GitHub username to display a profile README:
+
+1. Create a repository: `yourusername/yourusername`
+2. Add a README.md file
+3. Include your CoreDump badge
+4. Your stats will appear on your GitHub profile
+
+### Multiple Profiles
+
+If you track coding time across multiple GitHub accounts:
+
+```markdown
+## Personal Account
+![Stats](https://coredump.vercel.app/api/stats?username=personal-account&type=stats-card)
+
+## Work Account
+![Stats](https://coredump.vercel.app/api/stats?username=work-account&type=stats-card)
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Public API" icon="code" href="/embedding/public-api">
+    Access your stats programmatically with the public API
+  </Card>
+  <Card title="VS Code Extension" icon="download" href="/extension/overview">
+    Install the extension to start tracking your coding time
+  </Card>
+</CardGroup>

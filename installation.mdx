@@ -1,0 +1,496 @@
+---
+title: Installation
+description: Complete guide to self-hosting CoreDump on your own infrastructure
+---
+
+This guide covers everything you need to self-host CoreDump, including prerequisites, environment configuration, database setup, and deployment.
+
+<Note>
+  This guide is for self-hosting CoreDump. If you want to use the hosted version, check out the [Quickstart Guide](/quickstart) instead.
+</Note>
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Node.js** 18 or higher
+- **PostgreSQL** database (local or hosted)
+- **Git** for cloning the repository
+- **Package manager**: npm, yarn, pnpm, or bun
+
+<Info>
+  CoreDump is built with Next.js 16 and requires Node.js 18+. We recommend using Node.js 20 LTS for the best experience.
+</Info>
+
+## Clone the repository
+
+First, clone the CoreDump repository from GitHub:
+
+```bash
+git clone https://github.com/unsafe0x0/CoreDump.git
+cd CoreDump
+```
+
+## Install dependencies
+
+Install the required packages using your preferred package manager:
+
+<CodeGroup>
+```bash npm
+npm install
+```
+
+```bash yarn
+yarn install
+```
+
+```bash pnpm
+pnpm install
+```
+
+```bash bun
+bun install
+```
+</CodeGroup>
+
+<Info>
+  The `postinstall` script will automatically run `prisma generate` to generate the Prisma Client.
+</Info>
+
+## Environment configuration
+
+Create your environment file by copying the example:
+
+```bash
+cp .env.example .env.local
+```
+
+Now configure the following environment variables in `.env.local`:
+
+### Database configuration
+
+```bash .env.local
+# PostgreSQL connection string
+DATABASE_URL="postgresql://username:password@localhost:5432/coredump"
+
+# Direct database URL (required for some Prisma operations)
+DIRECT_URL="postgresql://username:password@localhost:5432/coredump"
+```
+
+<Warning>
+  Replace `username`, `password`, and `localhost:5432` with your actual PostgreSQL credentials and connection details.
+</Warning>
+
+**For hosted databases:**
+
+If you're using a hosted PostgreSQL service (Supabase, Neon, Railway, etc.), use their connection strings:
+
+```bash
+# Example for Supabase
+DATABASE_URL="postgresql://postgres:[password]@db.[project-ref].supabase.co:5432/postgres?pgbouncer=true"
+DIRECT_URL="postgresql://postgres:[password]@db.[project-ref].supabase.co:5432/postgres"
+```
+
+### NextAuth.js configuration
+
+```bash .env.local
+# NextAuth secret key (generate a random string)
+NEXTAUTH_SECRET="your-secret-key-here"
+
+# Your application URL
+NEXTAUTH_URL="http://localhost:3000"
+```
+
+<Info>
+  Generate a secure random string for `NEXTAUTH_SECRET` using: `openssl rand -base64 32`
+</Info>
+
+### Google OAuth configuration
+
+To enable Google authentication:
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select an existing one
+3. Enable the **Google+ API**
+4. Go to **Credentials** → **Create Credentials** → **OAuth 2.0 Client ID**
+5. Add authorized redirect URI: `http://localhost:3000/api/auth/callback/google`
+6. Copy your Client ID and Client Secret
+
+```bash .env.local
+# Google OAuth credentials
+GOOGLE_CLIENT_ID="your-google-client-id.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+```
+
+<Warning>
+  For production, update the authorized redirect URI to your production domain (e.g., `https://yourdomain.com/api/auth/callback/google`).
+</Warning>
+
+### Reset key configuration
+
+```bash .env.local
+# API key for resetting duration data
+RESET_KEY="your-reset-key-here"
+```
+
+<Info>
+  The reset key is used to protect the duration reset API endpoint. Generate a strong random string for this value.
+</Info>
+
+### Complete environment file example
+
+Here's a complete example of your `.env.local` file:
+
+```bash .env.local
+# Database
+DATABASE_URL="postgresql://postgres:password@localhost:5432/coredump"
+DIRECT_URL="postgresql://postgres:password@localhost:5432/coredump"
+
+# NextAuth
+NEXTAUTH_SECRET="generated-secret-key-from-openssl"
+NEXTAUTH_URL="http://localhost:3000"
+
+# Google OAuth
+GOOGLE_CLIENT_ID="123456789-abcdefghijklmnop.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET="GOCSPX-abcdefghijklmnopqrstuvwx"
+
+# Reset Key
+RESET_KEY="your-secure-reset-key"
+```
+
+## Database setup
+
+CoreDump uses Prisma as its ORM. Follow these steps to set up your database:
+
+### Generate Prisma Client
+
+```bash
+npx prisma generate
+```
+
+This generates the type-safe Prisma Client based on your schema.
+
+### Push database schema
+
+```bash
+npx prisma db push
+```
+
+This command:
+- Creates the database if it doesn't exist
+- Creates all tables, indexes, and constraints
+- Syncs your Prisma schema with the database
+
+<Info>
+  `db push` is ideal for development. For production, use [Prisma Migrate](https://www.prisma.io/docs/concepts/components/prisma-migrate) for version-controlled schema changes.
+</Info>
+
+### Database schema overview
+
+CoreDump's database includes the following main models:
+
+**User**
+- User accounts with authentication details
+- Profile information (GitHub username, Twitter, website)
+- Streak tracking and achievements
+- Private key for extension authentication
+
+**Activity**
+- Per-language coding time tracking
+- 24-hour, 7-day, and 30-day durations
+- Total all-time duration per language
+
+**DailyActivity**
+- Daily coding time aggregated by date
+- Weekly activity patterns
+
+**MonthlyActivity**
+- Monthly coding time summaries
+- Year-over-year comparisons
+
+### (Optional) Seed the database
+
+If you have seed data configured:
+
+```bash
+npx prisma db seed
+```
+
+## Run the development server
+
+Start the Next.js development server:
+
+<CodeGroup>
+```bash npm
+npm run dev
+```
+
+```bash yarn
+yarn dev
+```
+
+```bash pnpm
+pnpm dev
+```
+
+```bash bun
+bun dev
+```
+</CodeGroup>
+
+Your CoreDump instance will be available at [http://localhost:3000](http://localhost:3000).
+
+<Info>
+  The dev server uses Turbopack for faster builds and hot reloading.
+</Info>
+
+## Create your first user
+
+With the development server running:
+
+1. Navigate to [http://localhost:3000](http://localhost:3000)
+2. Click **Sign Up** or **Sign in with Google**
+3. Complete the registration process
+4. You'll be redirected to your dashboard
+5. Copy your **Private Key** from the dashboard
+
+## Configure the VS Code extension
+
+To track coding activity to your self-hosted instance:
+
+### Option 1: Use the official extension with custom endpoint
+
+If the CoreDump extension supports custom endpoints:
+
+1. Install the extension from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=Unsafezero.coredump)
+2. Configure the API endpoint in extension settings to point to your instance
+3. Enter your private key
+
+### Option 2: Fork and modify the extension
+
+1. Clone the [CoreDump Extension repository](https://github.com/unsafe0x0/CoreDump-Extension)
+2. Update the API endpoint in the extension code to your instance URL
+3. Build and install the extension locally
+4. Enter your private key from your self-hosted instance
+
+<Warning>
+  Make sure to update the API endpoint to match your deployment URL (e.g., `http://localhost:3000/api/activity`).
+</Warning>
+
+## Build for production
+
+When you're ready to deploy:
+
+<CodeGroup>
+```bash npm
+npm run build
+npm run start
+```
+
+```bash yarn
+yarn build
+yarn start
+```
+
+```bash pnpm
+pnpm build
+pnpm start
+```
+
+```bash bun
+bun run build
+bun start
+```
+</CodeGroup>
+
+The build process:
+1. Compiles TypeScript code
+2. Generates optimized production bundles
+3. Creates static pages where possible
+
+## Deployment options
+
+CoreDump can be deployed to various platforms:
+
+### Vercel (recommended)
+
+1. Push your code to GitHub
+2. Import the project in [Vercel](https://vercel.com)
+3. Add environment variables in Vercel dashboard
+4. Deploy
+
+<Info>
+  Vercel automatically detects Next.js projects and configures build settings.
+</Info>
+
+### Docker
+
+Create a `Dockerfile`:
+
+```dockerfile Dockerfile
+FROM node:20-alpine AS base
+
+# Install dependencies
+FROM base AS deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+
+# Build application
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npx prisma generate
+RUN npm run build
+
+# Production image
+FROM base AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+
+Build and run:
+
+```bash
+docker build -t coredump .
+docker run -p 3000:3000 --env-file .env.local coredump
+```
+
+### Other platforms
+
+CoreDump is compatible with:
+- **Railway** - Import from GitHub and add environment variables
+- **Render** - Connect repository and configure build command
+- **Netlify** - Use Next.js runtime for deployment
+- **DigitalOcean App Platform** - Deploy directly from GitHub
+- **Self-hosted VPS** - Use PM2 or systemd to manage the Node.js process
+
+## Database migrations (production)
+
+For production environments, use Prisma Migrate instead of `db push`:
+
+```bash
+# Create a migration
+npx prisma migrate dev --name init
+
+# Apply migrations in production
+npx prisma migrate deploy
+```
+
+<Warning>
+  Always test migrations in a staging environment before applying to production.
+</Warning>
+
+## Monitoring and maintenance
+
+### View database with Prisma Studio
+
+```bash
+npx prisma studio
+```
+
+This opens a visual database browser at [http://localhost:5555](http://localhost:5555).
+
+### Reset duration data
+
+CoreDump includes API endpoints to reset 24-hour, 7-day, and 30-day duration counters. These are typically run as cron jobs:
+
+```bash
+# Reset 24-hour durations (run daily)
+curl -X POST http://localhost:3000/api/reset-duration/24h \
+  -H "Authorization: Bearer YOUR_RESET_KEY"
+
+# Reset 7-day durations (run weekly)
+curl -X POST http://localhost:3000/api/reset-duration/7d \
+  -H "Authorization: Bearer YOUR_RESET_KEY"
+```
+
+<Info>
+  Set up cron jobs or scheduled tasks to automatically reset these durations at the appropriate intervals.
+</Info>
+
+## Troubleshooting
+
+### Database connection errors
+
+**Error: Can't reach database server**
+
+- Verify PostgreSQL is running
+- Check your `DATABASE_URL` credentials
+- Ensure the database exists
+- Check firewall rules if using a remote database
+
+### Prisma Client errors
+
+**Error: Prisma Client is not generated**
+
+Run:
+```bash
+npx prisma generate
+```
+
+### Build errors
+
+**Error: Environment variables not found**
+
+- Ensure `.env.local` exists and contains all required variables
+- For production builds, set environment variables in your hosting platform
+
+### Extension not connecting
+
+- Verify the API endpoint URL in the extension
+- Check that your private key is correct
+- Ensure the `/api/activity` endpoint is accessible
+- Check CORS settings if deploying to a custom domain
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card
+    title="API Reference"
+    icon="code"
+    href="/api/overview"
+  >
+    Explore all available API endpoints and integrate CoreDump with your tools.
+  </Card>
+  
+  <Card
+    title="VS Code Extension"
+    icon="download"
+    href="/extension/overview"
+  >
+    Install and configure the VS Code extension to start tracking your coding time.
+  </Card>
+  
+  <Card
+    title="Features Overview"
+    icon="rocket"
+    href="/features/dashboard"
+  >
+    Learn about all the features CoreDump offers, from streaks to achievements.
+  </Card>
+  
+  <Card
+    title="GitHub Repository"
+    icon="code-branch"
+    href="https://github.com/unsafe0x0/CoreDump"
+  >
+    Contribute to CoreDump development and help improve the platform.
+  </Card>
+</CardGroup>
+
+## Need help?
+
+If you encounter issues during installation:
+
+- Visit the [GitHub repository](https://github.com/unsafe0x0/CoreDump)
+- Open an issue with detailed error logs
+- Check the troubleshooting sections above for common problems

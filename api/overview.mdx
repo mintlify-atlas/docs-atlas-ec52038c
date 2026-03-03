@@ -1,0 +1,131 @@
+---
+title: 'API Overview'
+description: 'Base information for using the CoreDump API'
+---
+
+## Base URL
+
+All API requests should be made to:
+
+```
+https://your-domain.com/api
+```
+
+## Response Format
+
+All API responses follow a consistent JSON structure:
+
+```json
+{
+  "message": "Description of the result",
+  "status": 200,
+  "data": { /* Response data */ }
+}
+```
+
+### Success Response
+
+Successful requests return HTTP status codes in the 2xx range along with a JSON body containing:
+
+<ResponseField name="message" type="string">
+  Human-readable description of the operation result
+</ResponseField>
+
+<ResponseField name="status" type="number">
+  HTTP status code (200, 201, etc.)
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Response payload (optional, depends on endpoint)
+</ResponseField>
+
+### Error Response
+
+Failed requests return HTTP status codes in the 4xx or 5xx range:
+
+<ResponseField name="message" type="string">
+  Error description
+</ResponseField>
+
+<ResponseField name="status" type="number">
+  HTTP error code (400, 401, 404, 500, etc.)
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message (some endpoints use this field instead of message)
+</ResponseField>
+
+## Common Status Codes
+
+<ResponseField name="200" type="OK">
+  Request succeeded
+</ResponseField>
+
+<ResponseField name="201" type="Created">
+  Resource created successfully
+</ResponseField>
+
+<ResponseField name="400" type="Bad Request">
+  Invalid request parameters or missing required fields
+</ResponseField>
+
+<ResponseField name="401" type="Unauthorized">
+  Authentication required or invalid credentials
+</ResponseField>
+
+<ResponseField name="404" type="Not Found">
+  Requested resource not found
+</ResponseField>
+
+<ResponseField name="500" type="Internal Server Error">
+  Server error occurred while processing request
+</ResponseField>
+
+## Rate Limiting
+
+Some endpoints implement caching to improve performance:
+
+- **Leaderboard**: Cached for 10 minutes (LRU cache)
+- **Profile**: Cached for 5 minutes per username (LRU cache)
+
+## CORS Headers
+
+Public endpoints (like `/api/stats`) include CORS headers to allow cross-origin requests:
+
+```
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET
+Access-Control-Allow-Headers: Content-Type
+```
+
+## Data Types
+
+### Duration
+
+All duration values are measured in **minutes** as floating-point numbers, rounded to 2 decimal places.
+
+### Timestamps
+
+All timestamps are returned in ISO 8601 format:
+
+```
+2024-03-15T14:30:00.000Z
+```
+
+### WeekDay
+
+Week days are represented as integers (0-6):
+- `0` = Sunday
+- `1` = Monday
+- `2` = Tuesday
+- `3` = Wednesday
+- `4` = Thursday
+- `5` = Friday
+- `6` = Saturday
+
+### Month
+
+Months are represented as integers (0-11):
+- `0` = January
+- `1` = February
+- `11` = December

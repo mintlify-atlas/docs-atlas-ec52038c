@@ -1,0 +1,63 @@
+---
+title: 'Public Stats Endpoint'
+description: 'Note about the public stats endpoint'
+---
+
+<Note>
+  The `/api/public-stats` endpoint does not exist as a separate route.
+  
+  For public coding statistics, please use the **[GET /api/stats](/api/stats)** endpoint instead.
+</Note>
+
+## What You're Looking For
+
+If you need public coding statistics for a user, the `/api/stats` endpoint provides:
+
+- Total coding time today (last 24 hours)
+- Total coding time this week (last 7 days)
+- Formatted as human-readable strings (e.g., "8h 45m")
+- CORS-enabled for cross-origin requests
+- No authentication required
+
+## Quick Example
+
+```bash
+curl -X GET 'https://your-domain.com/api/stats?username=johndoe'
+```
+
+```json
+{
+  "username": "johndoe",
+  "weekTotal": "12h 30m",
+  "todayTotal": "2h 15m"
+}
+```
+
+## Available Public Endpoints
+
+For more comprehensive public data, explore these endpoints:
+
+<CardGroup cols={2}>
+  <Card title="GET /api/stats" icon="chart-simple" href="/api/stats">
+    Simple coding time statistics (today + week)
+  </Card>
+  
+  <Card title="GET /api/profile" icon="user" href="/api/profile">
+    Full public profile with detailed activity breakdown
+  </Card>
+  
+  <Card title="GET /api/leaderboard" icon="trophy" href="/api/leaderboard">
+    Global leaderboard with all users' statistics
+  </Card>
+</CardGroup>
+
+## Need More Detail?
+
+If you need more comprehensive statistics including:
+- Daily activity breakdown
+- Monthly activity history
+- Per-language statistics
+- Achievement data
+- Streak information
+
+Use the **[GET /api/profile](/api/profile)** endpoint instead.

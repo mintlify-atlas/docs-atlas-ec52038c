@@ -1,0 +1,229 @@
+---
+title: Streaks
+description: Track consecutive days of coding and maintain your momentum
+---
+
+Streaks are one of CoreDump's most motivating features. A streak tracks consecutive days of coding activity, encouraging you to maintain a consistent coding habit.
+
+## How Streaks Work
+
+Your streak counter increases by 1 each day you log coding activity. If you skip a day without any tracked coding time, your streak resets to zero.
+
+**Example streak progression:**
+- Day 1: Code for 30 minutes → Streak: 1
+- Day 2: Code for 2 hours → Streak: 2
+- Day 3: Code for 15 minutes → Streak: 3
+- Day 4: No coding activity → Streak: 0
+- Day 5: Code for 1 hour → Streak: 1
+
+<Info>
+Your streak increases once per day, regardless of how much you code. A 10-minute session counts the same as a 10-hour session for streak purposes.
+</Info>
+
+## What Counts Toward a Streak
+
+A day counts toward your streak when:
+
+- You have **at least one minute** of tracked coding activity
+- The activity is logged through the CoreDump editor plugin
+- The activity registers **before midnight** in your local timezone (UTC-based)
+
+**Any coding activity counts:**
+- Writing new code
+- Editing existing files
+- Debugging and testing
+- Configuration files
+- Documentation in code files
+- Any programming language supported by CoreDump
+
+<Tip>
+You don't need to code for hours to maintain your streak. Even 15-30 minutes of focused work will keep it alive.
+</Tip>
+
+## Streak Reset Rules
+
+Your streak resets to zero when:
+
+### Missed Day
+You go an entire calendar day (midnight to midnight UTC) without any tracked coding activity.
+
+### How Timezone Works
+Streaks follow UTC timezone for consistency:
+- All users have the same daily deadline
+- Resets occur at midnight UTC, not your local time
+- Plan accordingly if you're far from UTC
+
+<Note>
+If you're in PST (UTC-8), midnight UTC is 4:00 PM the previous day. Code before your local equivalent of midnight UTC to count for that day.
+</Note>
+
+## Current Streak vs Max Streak
+
+CoreDump tracks two different streak values:
+
+### Current Streak
+Your ongoing consecutive days of coding. This is the active counter that increases daily or resets to zero.
+
+**Displayed as:**
+- "Current Streak: 12 days"
+- Updates in real-time
+- Appears on dashboard and public profile
+
+### Max Streak
+Your personal record for consecutive coding days. This value only increases - it never decreases.
+
+**Displayed as:**
+- "Max Streak: 45 days"
+- Represents your best performance ever
+- Gives you a target to beat
+
+<Info>
+When your current streak exceeds your max streak, both numbers update together. Otherwise, max streak stays constant as your all-time best.
+</Info>
+
+## Streak Tracking Details
+
+### How It's Stored
+Your streak is stored in your user account with:
+- `streak` - Current consecutive days
+- `maxStreak` - All-time record
+- `streakUpdatedAt` - Last time streak was updated
+
+The system automatically:
+- Increments streaks when you code
+- Resets streaks after missed days
+- Updates max streak when records are broken
+- Tracks the timestamp of last update
+
+### Automatic Updates
+Streak calculations happen automatically:
+1. You code with the editor plugin
+2. Activity registers with CoreDump servers
+3. System checks if it's a new day since last activity
+4. Streak increments (if consecutive) or resets (if day skipped)
+5. Max streak updates if current exceeds it
+
+<Note>
+You never manually update your streak. Everything happens automatically based on your coding activity.
+</Note>
+
+## Maintaining Your Streak
+
+Strategies for keeping streaks alive:
+
+### 1. Code Every Day
+Set a minimum daily coding goal - even 15 minutes. Small daily sessions beat sporadic long sessions for streak purposes.
+
+### 2. Set Reminders
+Use phone or calendar reminders for your UTC deadline. Don't let a busy day end without coding.
+
+### 3. Quick Streak-Savers
+- Work on small bug fixes
+- Update documentation
+- Review and refactor old code
+- Practice coding challenges
+- Experiment with new features
+
+### 4. Plan Around Travel
+Before trips or busy periods:
+- Set up your coding environment on a laptop
+- Have small projects ready for quick sessions
+- Remember the UTC deadline in different timezones
+
+<Tip>
+Many developers set a "minimum coding time" goal of 30 minutes daily. This ensures quality practice while maintaining the streak.
+</Tip>
+
+## Streak Achievements
+
+Streaks unlock special achievements:
+
+**7-Day Streak**
+- Title: "7-Day Streak"
+- Points: 50
+- Description: Log coding activity for 7 days in a row
+
+**30-Day Streak**
+- Title: "30-Day Streak"
+- Points: 250
+- Description: Keep your streak alive for 30 consecutive days
+
+<Info>
+Achievements are unlocked when your current streak reaches the milestone. If your streak breaks and you build it again, you don't re-earn the achievement.
+</Info>
+
+## Viewing Streak Information
+
+Your streak appears in multiple places:
+
+**Dashboard:**
+- Prominent display in statistics grid
+- Both current and max streak shown
+
+**Public Profile:**
+- Visible to all users viewing your profile
+- Shows your coding consistency
+
+**Leaderboard:**
+- Current streak shown next to your name
+- Helps others see who codes consistently
+
+## Streak Psychology
+
+Why streaks are motivating:
+
+### Loss Aversion
+Once you have a streak, you don't want to lose it. This motivates daily coding even when you're busy.
+
+### Visible Progress
+Streaks make abstract "coding more consistently" into concrete "don't break the chain."
+
+### Social Proof
+Public streaks show your discipline to other developers, employers, and collaborators.
+
+### Achievement Unlocks
+Streak milestones award achievements and points, providing multiple layers of reward.
+
+<Tip>
+If you break a long streak, don't get discouraged. Start building a new one immediately. Your max streak still shows your best effort.
+</Tip>
+
+## Streak Best Practices
+
+### Do:
+- Code at consistent times daily
+- Set realistic minimum daily goals
+- Use streaks as motivation, not stress
+- Celebrate milestone streaks (7, 30, 100 days)
+- Share your streak achievements with others
+
+### Don't:
+- Sacrifice code quality for streak maintenance
+- Code when you're sick or need rest (breaks are okay)
+- Compare your streak to others' obsessively
+- Let a broken streak demotivate you permanently
+
+<Note>
+Streaks are a tool for building consistency, not a measure of your worth as a developer. Use them positively.
+</Note>
+
+## Common Streak Questions
+
+**Q: What if I'm sick or on vacation?**
+A: Streaks will break if you don't code. This is by design - streaks measure actual consistency. Plan accordingly or accept the reset.
+
+**Q: Can I backdate coding activity?**
+A: No. Activity must be logged in real-time through the editor plugin.
+
+**Q: Does weekend coding count?**
+A: Yes. Streaks count all calendar days equally, including weekends and holidays.
+
+**Q: What if the editor plugin fails to track a day?**
+A: Contact support immediately with evidence. Technical issues are handled case-by-case.
+
+**Q: Is there a maximum streak length?**
+A: No limit. The highest streak is theoretically unlimited.
+
+<Info>
+The current longest streak on CoreDump will vary. Check the leaderboards to see which developers maintain the most impressive streaks.
+</Info>

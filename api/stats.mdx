@@ -1,0 +1,201 @@
+---
+title: 'GET /api/stats'
+description: 'Get public coding statistics for a user'
+---
+
+## Endpoint
+
+```
+GET /api/stats?username={gitUsername}
+```
+
+## Description
+
+Retrieve simplified public coding statistics for a specific user, showing their coding time for today and the past week. This lightweight endpoint is designed for badges, widgets, and quick status displays.
+
+## Authentication
+
+No authentication required. This is a public endpoint with CORS enabled.
+
+## Request Parameters
+
+<ParamField query="username" type="string" required>
+  GitHub username of the user to fetch statistics for
+</ParamField>
+
+## CORS Headers
+
+This endpoint includes CORS headers to allow cross-origin requests:
+
+```
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET
+Access-Control-Allow-Headers: Content-Type
+```
+
+## Response
+
+### Success (200)
+
+```json
+{
+  "username": "johndoe",
+  "weekTotal": "8h 45m",
+  "todayTotal": "1h 23m"
+}
+```
+
+<ResponseField name="username" type="string">
+  GitHub username of the user
+</ResponseField>
+
+<ResponseField name="weekTotal" type="string">
+  Total coding time in the last 7 days, formatted as "Xh Ym"
+  
+  Example: "8h 45m" represents 8 hours and 45 minutes
+</ResponseField>
+
+<ResponseField name="todayTotal" type="string">
+  Total coding time in the last 24 hours, formatted as "Xh Ym"
+  
+  Example: "1h 23m" represents 1 hour and 23 minutes
+</ResponseField>
+
+## Error Responses
+
+### Missing Username (400)
+
+```json
+{
+  "error": "Username is required"
+}
+```
+
+Returned when the `username` query parameter is missing. Includes CORS headers.
+
+### User Not Found (404)
+
+```json
+{
+  "error": "User not found"
+}
+```
+
+Returned when no user exists with the specified GitHub username. Includes CORS headers.
+
+### Internal Server Error (500)
+
+```json
+{
+  "error": "Internal Server Error"
+}
+```
+
+Returned when an unexpected error occurs. Includes CORS headers.
+
+## Example Request
+
+```bash
+curl -X GET 'https://your-domain.com/api/stats?username=johndoe'
+```
+
+## Response Examples
+
+### User with Activity
+
+```bash
+curl 'https://your-domain.com/api/stats?username=johndoe'
+```
+
+```json
+{
+  "username": "johndoe",
+  "weekTotal": "12h 30m",
+  "todayTotal": "2h 15m"
+}
+```
+
+### User with No Recent Activity
+
+```json
+{
+  "username": "janesmith",
+  "weekTotal": "0h 0m",
+  "todayTotal": "0h 0m"
+}
+```
+
+### User with Only Minutes
+
+```json
+{
+  "username": "devuser",
+  "weekTotal": "0h 45m",
+  "todayTotal": "0h 12m"
+}
+```
+
+## Time Formatting
+
+Durations are formatted using the `formatMinutesAsHrMin` utility:
+
+- **Input**: Minutes (number)
+- **Output**: "Xh Ym" (string)
+- **Examples**:
+  - 0 minutes → "0h 0m"
+  - 45 minutes → "0h 45m"
+  - 90 minutes → "1h 30m"
+  - 525 minutes → "8h 45m"
+
+## Use Cases
+
+This endpoint is perfect for:
+
+### README Badges
+
+Create dynamic badges showing your coding activity:
+
+```markdown
+![Coding Time](https://img.shields.io/endpoint?url=https://your-domain.com/api/stats?username=yourusername)
+```
+
+### Status Widgets
+
+Embed real-time coding statistics in your:
+- Portfolio website
+- Personal blog
+- GitHub profile
+- Social media bio links
+
+### Third-Party Integrations
+
+Integrate with:
+- Discord bots
+- Slack status updates
+- Twitter bio automations
+- Dashboard aggregators
+
+## Comparison with Other Endpoints
+
+| Endpoint | Auth Required | Data Returned | Use Case |
+|----------|---------------|---------------|----------|
+| `/api/stats` | No | Simple totals (today, week) | Badges, widgets |
+| `/api/profile` | No | Full profile with history | Public profiles |
+| `/api/dashboard` | Yes | Private data + API key | User dashboard |
+
+<Note>
+  The statistics are calculated by aggregating all activities across all programming languages for the specified time periods.
+</Note>
+
+## Cross-Origin Usage
+
+Since this endpoint includes CORS headers, you can call it directly from browser JavaScript:
+
+```javascript
+fetch('https://your-domain.com/api/stats?username=johndoe')
+  .then(res => res.json())
+  .then(data => {
+    console.log(`Today: ${data.todayTotal}`);
+    console.log(`This week: ${data.weekTotal}`);
+  });
+```

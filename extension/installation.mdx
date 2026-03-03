@@ -1,0 +1,129 @@
+---
+title: Installation
+description: Install the CoreDump VS Code extension and start tracking your coding activity
+---
+
+Get started with CoreDump by installing the VS Code extension. This guide covers installation from the VS Code Marketplace and alternative methods.
+
+## Prerequisites
+
+Before installing the extension, make sure you have:
+
+- **Visual Studio Code** installed (version 1.60.0 or higher recommended)
+- **A CoreDump account** - Sign up at [CoreDump](https://coredump.vercel.app) if you haven't already
+- **Your private API key** - You'll need this to configure the extension after installation
+
+<Note>
+  You can find your private API key in your CoreDump dashboard after logging in.
+</Note>
+
+## Install from VS Code Marketplace
+
+The easiest way to install CoreDump is directly from the VS Code Marketplace.
+
+<Steps>
+  <Step title="Open VS Code">
+    Launch Visual Studio Code on your computer
+  </Step>
+  
+  <Step title="Open Extensions view">
+    Click the Extensions icon in the Activity Bar on the left side of VS Code, or press `Ctrl+Shift+X` (Windows/Linux) or `Cmd+Shift+X` (Mac)
+  </Step>
+  
+  <Step title="Search for CoreDump">
+    In the Extensions search box, type "CoreDump" and look for the extension by **Unsafezero**
+  </Step>
+  
+  <Step title="Install the extension">
+    Click the **Install** button on the CoreDump extension page
+  </Step>
+  
+  <Step title="Wait for installation">
+    The extension will download and install automatically. This typically takes a few seconds
+  </Step>
+</Steps>
+
+<Tip>
+  You can also install directly from the [VS Code Marketplace website](https://marketplace.visualstudio.com/items?itemName=Unsafezero.coredump) by clicking the Install button, which will open VS Code automatically.
+</Tip>
+
+## Alternative: Install from GitHub
+
+If you prefer to install manually or want to use the latest development version:
+
+<Steps>
+  <Step title="Visit the GitHub repository">
+    Go to [CoreDump Extension on GitHub](https://github.com/unsafe0x0/CoreDump-Extension)
+  </Step>
+  
+  <Step title="Download the extension package">
+    Download the `.vsix` file from the latest release, or clone the repository and build it yourself following the README instructions
+  </Step>
+  
+  <Step title="Install from VSIX">
+    In VS Code, open the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`), search for "Install from VSIX", and select the downloaded file
+  </Step>
+</Steps>
+
+## Verify Installation
+
+After installation, verify that the extension is working:
+
+<Steps>
+  <Step title="Check installed extensions">
+    Open the Extensions view and search for "CoreDump" - you should see it listed with an "Installed" label
+  </Step>
+  
+  <Step title="Look for CoreDump commands">
+    Open the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`) and type "CoreDump" - you should see extension commands like "CoreDump: Enter Private Key"
+  </Step>
+  
+  <Step title="Check for extension icon">
+    Depending on the extension version, you may see a CoreDump icon in your status bar or activity bar
+  </Step>
+</Steps>
+
+<Note>
+  The extension won't start tracking until you configure it with your private API key. See the [Configuration guide](/extension/configuration) for next steps.
+</Note>
+
+## Troubleshooting Installation
+
+### Extension won't install
+
+If you encounter issues during installation:
+
+- **Check VS Code version** - Ensure you're running a recent version of VS Code
+- **Restart VS Code** - Sometimes a restart is needed to complete installation
+- **Check internet connection** - The Marketplace requires an active internet connection
+- **Clear extension cache** - Try uninstalling and reinstalling the extension
+
+### Extension not appearing
+
+If the extension installed but doesn't appear:
+
+- **Reload VS Code window** - Open Command Palette and run "Developer: Reload Window"
+- **Check extension logs** - Open Output panel (`View > Output`) and select "Extension Host" from the dropdown
+- **Verify installation location** - Check your VS Code extensions folder to confirm the extension files are present
+
+<Tip>
+  For persistent issues, visit the [GitHub repository](https://github.com/unsafe0x0/CoreDump-Extension) to report bugs or check for known issues.
+</Tip>
+
+## Updating the Extension
+
+VS Code automatically checks for extension updates. When a new version is available:
+
+1. You'll see an update notification in the Extensions view
+2. Click **Update** to install the latest version
+3. Reload VS Code when prompted
+
+Your configuration and API key will be preserved during updates.
+
+## Next Steps
+
+Now that you've installed the extension, it's time to configure it:
+
+<Card title="Configure Extension" icon="gear" href="/extension/configuration">
+  Set up your private API key and start tracking your coding activity
+</Card>

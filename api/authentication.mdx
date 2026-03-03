@@ -1,0 +1,144 @@
+---
+title: 'Authentication'
+description: 'Learn how to authenticate with the CoreDump API'
+---
+
+## Authentication Methods
+
+CoreDump API uses two authentication methods depending on the endpoint:
+
+### 1. Private Key Authentication
+
+Used for activity tracking and requires a private key in the request body.
+
+### 2. Session Authentication
+
+Used for dashboard access and requires an authenticated session via NextAuth.
+
+## Getting Your Private Key
+
+Your private key is automatically generated when you register an account. You can find it in your dashboard after logging in.
+
+### Registration
+
+To obtain a private key, register an account:
+
+```bash
+curl -X POST https://your-domain.com/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Doe",
+    "email": "john@example.com",
+    "gitUsername": "johndoe",
+    "twitterUsername": "johndoe",
+    "password": "your-secure-password"
+  }'
+```
+
+<ParamField body="name" type="string" required>
+  Your full name
+</ParamField>
+
+<ParamField body="email" type="string" required>
+  Your email address (will be normalized to lowercase)
+</ParamField>
+
+<ParamField body="gitUsername" type="string" required>
+  Your GitHub username (must be a valid GitHub account)
+</ParamField>
+
+<ParamField body="twitterUsername" type="string" required>
+  Your Twitter/X username
+</ParamField>
+
+<ParamField body="password" type="string" required>
+  Your account password (will be hashed with bcrypt)
+</ParamField>
+
+### Response
+
+```json
+{
+  "message": "User registered successfully",
+  "status": 201
+}
+```
+
+## Using Private Key Authentication
+
+For endpoints that require a private key (like `/api/activity`), include it in the request body:
+
+```bash
+curl -X POST https://your-domain.com/api/activity \
+  -H "Content-Type: application/json" \
+  -d '{
+    "privateKey": "your-private-key-here",
+    "languageName": "typescript",
+    "timeSpent": 15.5
+  }'
+```
+
+<Warning>
+  Keep your private key secure! Do not share it or commit it to version control.
+</Warning>
+
+## Using Session Authentication
+
+For dashboard access (`/api/dashboard`), you must be logged in via NextAuth. This endpoint checks for an active session:
+
+```typescript
+const session = await getServerSession(authOptions);
+if (!session?.user?.id) {
+  return { message: "Unauthorized", status: 401 };
+}
+```
+
+## Public Endpoints
+
+Some endpoints do not require authentication:
+
+- `GET /api/leaderboard` - View global leaderboard
+- `GET /api/profile?username={gitUsername}` - View public user profile
+- `GET /api/stats?username={gitUsername}` - View public coding statistics
+
+These endpoints are accessible without any authentication.
+
+## Error Responses
+
+### Invalid Private Key
+
+```json
+{
+  "message": "User not found",
+  "status": 404
+}
+```
+
+### Missing Authentication
+
+```json
+{
+  "message": "Unauthorized",
+  "status": 401
+}
+```
+
+### Invalid GitHub Username
+
+During registration, if the GitHub username doesn't exist:
+
+```json
+{
+  "message": "GitHub user not found",
+  "status": 404
+}
+```
+
+### User Already Exists
+
+```json
+{
+  "error": "User already exists",
+  "status": 400
+}
+```

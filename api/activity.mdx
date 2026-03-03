@@ -1,0 +1,162 @@
+---
+title: 'POST /api/activity'
+description: 'Track coding activity for a user'
+---
+
+## Endpoint
+
+```
+POST /api/activity
+```
+
+## Description
+
+Submit coding activity data to track time spent in a specific programming language. This endpoint:
+
+- Updates user activity statistics
+- Increments daily, weekly, and monthly durations
+- Calculates and updates coding streaks
+- Awards achievements based on milestones
+- Computes total points (1 point per 10 minutes)
+
+## Authentication
+
+Requires a valid private key in the request body.
+
+## Request Body
+
+<ParamField body="privateKey" type="string" required>
+  Your unique private key for authentication
+</ParamField>
+
+<ParamField body="languageName" type="string" required>
+  Programming language name (e.g., "typescript", "python", "javascript")
+  
+  Must be a supported programming language. The name is case-insensitive and will be normalized to lowercase.
+</ParamField>
+
+<ParamField body="timeSpent" type="number" required>
+  Time spent coding in minutes (floating-point number)
+  
+  Must be greater than 0. Will be rounded to 2 decimal places.
+</ParamField>
+
+## Response
+
+### Success (200)
+
+```json
+{
+  "message": "Activity updated for John Doe (typescript): +15.5m",
+  "status": 200
+}
+```
+
+<ResponseField name="message" type="string">
+  Confirmation message including username, language, and time added
+</ResponseField>
+
+<ResponseField name="status" type="number">
+  HTTP status code (200)
+</ResponseField>
+
+## Error Responses
+
+### Missing Fields (400)
+
+```json
+{
+  "message": "Missing fields",
+  "status": 400
+}
+```
+
+Returned when `privateKey`, `languageName`, or `timeSpent` is missing or invalid.
+
+### Unsupported Language (400)
+
+```json
+{
+  "message": "Unsupported language",
+  "status": 400
+}
+```
+
+Returned when the programming language is not in the supported languages list.
+
+### Invalid Time Spent (400)
+
+```json
+{
+  "message": "Invalid time spent",
+  "status": 400
+}
+```
+
+Returned when `timeSpent` is less than or equal to 0.
+
+### User Not Found (404)
+
+```json
+{
+  "message": "User not found",
+  "status": 404
+}
+```
+
+Returned when the provided private key doesn't match any user.
+
+### Internal Server Error (500)
+
+```json
+{
+  "message": "Internal server error",
+  "status": 500
+}
+```
+
+Returned when an unexpected error occurs during processing.
+
+## Example Request
+
+```bash
+curl -X POST https://your-domain.com/api/activity \
+  -H "Content-Type: application/json" \
+  -d '{
+    "privateKey": "ck1a2b3c4d5e6f7g8h9i0j",
+    "languageName": "typescript",
+    "timeSpent": 15.5
+  }'
+```
+
+## What Happens When You Submit Activity
+
+1. **Validation**: Checks that all required fields are present and valid
+2. **Language Normalization**: Converts language name to lowercase and maps to short name
+3. **Time Rounding**: Rounds time to 2 decimal places
+4. **Activity Update**: Creates or updates activity record for the language
+5. **Daily Activity**: Records duration for today's date
+6. **Monthly Activity**: Aggregates and updates monthly totals
+7. **Streak Calculation**: Updates coding streak based on activity dates
+8. **Achievements**: Generates and awards new achievements based on milestones
+9. **Points Calculation**: Updates total points (1 point per 10 minutes)
+
+## Streak Logic
+
+- **Same Day**: Streak remains unchanged
+- **Consecutive Day**: Streak increments by 1
+- **Gap in Activity**: Streak resets to 1
+- **Max Streak**: Automatically tracked as the highest streak achieved
+
+## Supported Time Periods
+
+Activity is tracked across multiple time periods:
+
+- **Total**: All-time duration
+- **Last 24 Hours**: Rolling 24-hour window
+- **Last 7 Days**: Rolling 7-day window
+- **Last 30 Days**: Rolling 30-day window
+
+<Note>
+  The rolling time periods (24h, 7d, 30d) are reset periodically by a separate background process.
+</Note>

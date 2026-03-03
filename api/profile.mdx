@@ -1,0 +1,301 @@
+---
+title: 'GET /api/profile'
+description: 'Get public user profile data by username'
+---
+
+## Endpoint
+
+```
+GET /api/profile?username={gitUsername}
+```
+
+## Description
+
+Retrieve detailed public profile information for a specific user by their GitHub username. This endpoint provides comprehensive statistics including:
+
+- User profile information
+- Coding streaks and achievements
+- Activity breakdown by programming language
+- Daily activity for the current week
+- Monthly activity history
+
+This is a public endpoint that does not require authentication.
+
+## Authentication
+
+No authentication required. This is a public endpoint.
+
+## Request Parameters
+
+<ParamField query="username" type="string" required>
+  GitHub username of the user to fetch
+  
+  The username lookup is case-insensitive and will be normalized to lowercase.
+</ParamField>
+
+## Caching
+
+This endpoint uses LRU caching:
+- **Cache size**: 100 entries (per username)
+- **TTL**: 5 minutes (300,000ms)
+
+Cached responses include the message "Fetched from cache".
+
+## Response
+
+### Success (200)
+
+```json
+{
+  "message": "User profile data fetched successfully",
+  "data": {
+    "name": "John Doe",
+    "gitUsername": "johndoe",
+    "twitterUsername": "johndoe",
+    "website": "https://johndoe.dev",
+    "profileImage": "https://avatars.githubusercontent.com/u/123456",
+    "streak": 15,
+    "maxStreak": 28,
+    "totalPoints": 456,
+    "achievements": ["first-commit", "week-warrior", "language-master"],
+    "activities": [
+      {
+        "languageName": "typescript",
+        "shortLanguageName": "TS",
+        "totalDuration": 4560.5,
+        "last24HoursDuration": 45.0,
+        "last7DaysDuration": 320.5,
+        "last30DaysDuration": 1250.0
+      },
+      {
+        "languageName": "python",
+        "shortLanguageName": "PY",
+        "totalDuration": 2340.0,
+        "last24HoursDuration": 0,
+        "last7DaysDuration": 180.0,
+        "last30DaysDuration": 890.0
+      }
+    ],
+    "dailyActivity": [
+      {
+        "weekDay": 1,
+        "date": "2024-03-11T00:00:00.000Z",
+        "duration": 120.5
+      },
+      {
+        "weekDay": 2,
+        "date": "2024-03-12T00:00:00.000Z",
+        "duration": 95.0
+      },
+      {
+        "weekDay": 3,
+        "date": "2024-03-13T00:00:00.000Z",
+        "duration": 0
+      }
+    ],
+    "monthlyActivity": [
+      {
+        "month": 0,
+        "year": 2024,
+        "totalDuration": 1840.0
+      },
+      {
+        "month": 1,
+        "year": 2024,
+        "totalDuration": 2150.5
+      },
+      {
+        "month": 2,
+        "year": 2024,
+        "totalDuration": 1320.0
+      }
+    ]
+  },
+  "status": 200
+}
+```
+
+### Response Fields
+
+<ResponseField name="message" type="string">
+  Success message ("User profile data fetched successfully" or "Fetched from cache")
+</ResponseField>
+
+<ResponseField name="status" type="number">
+  HTTP status code (200)
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  User profile data
+  
+  <Expandable title="Profile Properties">
+    <ResponseField name="name" type="string">
+      User's full name
+    </ResponseField>
+    
+    <ResponseField name="gitUsername" type="string">
+      GitHub username
+    </ResponseField>
+    
+    <ResponseField name="twitterUsername" type="string | null">
+      Twitter/X username (nullable)
+    </ResponseField>
+    
+    <ResponseField name="website" type="string | null">
+      User's website URL (nullable)
+    </ResponseField>
+    
+    <ResponseField name="profileImage" type="string | null">
+      Profile image URL from GitHub (nullable)
+    </ResponseField>
+    
+    <ResponseField name="streak" type="number">
+      Current consecutive days coding streak (defaults to 0)
+    </ResponseField>
+    
+    <ResponseField name="maxStreak" type="number">
+      Highest streak ever achieved (defaults to 0)
+    </ResponseField>
+    
+    <ResponseField name="totalPoints" type="number">
+      Total points earned (1 point per 10 minutes, defaults to 0)
+    </ResponseField>
+    
+    <ResponseField name="achievements" type="string[]">
+      Array of achievement IDs (defaults to empty array)
+    </ResponseField>
+    
+    <ResponseField name="activities" type="array">
+      Array of activity objects per programming language
+      
+      <Expandable title="Activity Object">
+        <ResponseField name="languageName" type="string">
+          Programming language name (lowercase)
+        </ResponseField>
+        
+        <ResponseField name="shortLanguageName" type="string">
+          Abbreviated language name (e.g., "TS", "PY")
+        </ResponseField>
+        
+        <ResponseField name="totalDuration" type="number">
+          Total time spent in minutes (all-time)
+        </ResponseField>
+        
+        <ResponseField name="last24HoursDuration" type="number">
+          Time spent in last 24 hours (minutes)
+        </ResponseField>
+        
+        <ResponseField name="last7DaysDuration" type="number">
+          Time spent in last 7 days (minutes)
+        </ResponseField>
+        
+        <ResponseField name="last30DaysDuration" type="number">
+          Time spent in last 30 days (minutes)
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="dailyActivity" type="array">
+      Activity for each day of the current week (Monday-Sunday)
+      
+      <Expandable title="Daily Activity Object">
+        <ResponseField name="weekDay" type="number">
+          Day of week (0=Sunday, 1=Monday, ... 6=Saturday)
+        </ResponseField>
+        
+        <ResponseField name="date" type="string">
+          Date in ISO 8601 format
+        </ResponseField>
+        
+        <ResponseField name="duration" type="number">
+          Time spent coding on this day (minutes)
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="monthlyActivity" type="array">
+      Monthly activity history
+      
+      <Expandable title="Monthly Activity Object">
+        <ResponseField name="month" type="number">
+          Month number (0=January, 1=February, ... 11=December)
+        </ResponseField>
+        
+        <ResponseField name="year" type="number">
+          Year
+        </ResponseField>
+        
+        <ResponseField name="totalDuration" type="number">
+          Total time spent in this month (minutes)
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Error Responses
+
+### Missing Username (400)
+
+```json
+{
+  "message": "Username is required",
+  "status": 400
+}
+```
+
+Returned when the `username` query parameter is missing.
+
+### User Not Found (404)
+
+```json
+{
+  "message": "User not found",
+  "status": 404
+}
+```
+
+Returned when no user exists with the specified GitHub username.
+
+### Internal Server Error (500)
+
+```json
+{
+  "message": "Something went wrong",
+  "status": 500
+}
+```
+
+Returned when an unexpected error occurs.
+
+## Example Request
+
+```bash
+curl -X GET 'https://your-domain.com/api/profile?username=johndoe'
+```
+
+## Differences from Dashboard Endpoint
+
+Unlike `/api/dashboard`, this endpoint:
+
+- Does NOT require authentication
+- Uses GitHub username instead of session
+- Does NOT include private information (email, privateKey, user ID, role)
+- Implements caching for better performance
+- Is intended for public profile pages and widgets
+
+## Use Cases
+
+- Public profile pages
+- Embedded coding statistics widgets
+- Portfolio websites
+- Social sharing of coding activity
+- Third-party integrations
+
+## Daily Activity Week Range
+
+The `dailyActivity` array always contains 7 entries representing Monday through Sunday of the current week (week starts on Monday). Days without activity will have a duration of 0.
+
+<Note>
+  This endpoint returns public profile data only. Sensitive information like email addresses and private keys are not included.
+</Note>

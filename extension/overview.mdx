@@ -1,0 +1,93 @@
+---
+title: Extension Overview
+description: Learn about the CoreDump VS Code extension and how it tracks your coding activity
+---
+
+The CoreDump VS Code extension is your companion for automatic coding activity tracking. It monitors your development work in real-time and sends activity data to your CoreDump account, helping you build streaks, compete on leaderboards, and gain insights into your coding habits.
+
+## What It Does
+
+The extension runs silently in the background while you code, tracking:
+
+- **Coding time** - Time spent actively writing code in VS Code
+- **Programming languages** - Which languages you use and how much time you spend in each
+- **Daily activity** - Your coding sessions throughout the day
+
+All this data automatically syncs to your CoreDump dashboard, where you can view detailed analytics, maintain your streak, and compete with other developers.
+
+## How It Works
+
+<Steps>
+  <Step title="Automatic tracking">
+    Once configured with your private API key, the extension automatically detects when you're actively coding
+  </Step>
+  <Step title="Language detection">
+    The extension identifies the programming language of each file you work on
+  </Step>
+  <Step title="Secure transmission">
+    Activity data is sent to CoreDump's API using your private key for authentication
+  </Step>
+  <Step title="Real-time updates">
+    Your dashboard updates in real-time as you code, tracking streaks and progress
+  </Step>
+</Steps>
+
+## Supported Languages
+
+The extension supports tracking for 40+ programming languages, including:
+
+- **Web Development**: JavaScript, TypeScript, HTML, CSS, SCSS, JSX, TSX
+- **Backend**: Python, Java, Go, Ruby, PHP, C#, Rust
+- **Mobile**: Swift, Kotlin, Dart
+- **Systems**: C, C++, Rust, Zig
+- **Scripting**: Shell, Bash, PowerShell, Lua, Perl
+- **Data**: SQL, R, Python
+- **Functional**: Haskell, Scala
+- **Configuration**: JSON, YAML, Dockerfile, Prisma
+- **Other**: Markdown, Plaintext, EJS, AssemblyScript, Groovy, RPGLE
+
+<Note>
+  If you work with a language not listed here, the extension will still track your time but may categorize it generically.
+</Note>
+
+## Privacy and Data Collection
+
+Your privacy matters. Here's what the extension collects:
+
+### What We Track
+
+- Time spent coding (in minutes)
+- Programming language names
+- Timestamps of coding sessions
+
+### What We Don't Track
+
+- Your actual code or file contents
+- File names or project names
+- Personal information beyond your CoreDump account
+- Keystrokes or specific code changes
+
+<Tip>
+  All data transmission uses your private API key for secure authentication. Keep this key confidential and never share it publicly.
+</Tip>
+
+## Benefits
+
+Using the CoreDump extension helps you:
+
+- **Build consistent habits** - Daily streak tracking motivates you to code regularly
+- **Understand your patterns** - See which languages and times of day you're most productive
+- **Compete and connect** - Join leaderboards and compare progress with other developers
+- **Showcase your work** - Display coding stats on your GitHub profile with README cards
+- **Track progress** - Monitor your growth over time with detailed analytics
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Install Extension" icon="download" href="/extension/installation">
+    Get started by installing the VS Code extension
+  </Card>
+  <Card title="Configure Extension" icon="gear" href="/extension/configuration">
+    Set up your private API key and start tracking
+  </Card>
+</CardGroup>
